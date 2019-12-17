@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Home Dashboard</title>
+		<style>
+			*{
+				user-select: none;
+				--box-sizing: border-box;
+			}
+
+			body {
+				padding: 0;
+				margin: 0;
+				background: black;
+				color: #f0f0f0;
+				font-family: 'Segoe UI';
+			}
+			h1{
+				margin: 0 0 15px;
+			}
+			#main{
+				width: 1004px;
+				height: 580px;
+				
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				grid-template-rows: repeat(2, 1fr);
+				grid-column-gap: 15px;
+				grid-row-gap: 15px;
+
+				padding: 10px;
+				
+				background: linear-gradient(to right, red, purple);
+			}
+			
+			#homerseklet-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				grid-template-rows: repeat(2, 1fr);
+				grid-column-gap: 0px;
+				grid-row-gap: 10px;
+			}
+			
+			.hom-div1 { grid-area: 1 / 1 / 2 / 2; }
+			.hom-div2 { grid-area: 1 / 2 / 2 / 3; }
+			.hom-div3 { grid-area: 2 / 1 / 3 / 2; }
+			.hom-div4 { grid-area: 2 / 2 / 3 / 3; }
+			
+			.hom {
+				height: 72px;
+				position: relative;
+			}
+			
+			.hom-text, .villany-text{
+				position: absolute;
+				top: 25%;
+				text-align: center;
+				width: 100%;
+			}
+
+			.hom-value, .villany-value{
+				position: relative;
+				font-size: 2.7em;
+				font-weight: bold;
+				
+				text-shadow: 0 0 10px black;
+			}
+
+			.hom-unit, .villany-unit{
+				position: relative;
+				top:30%
+			}
+			
+			.hom-name, .villany-name{
+				position: absolute;
+				font-size: 0.7em
+			}
+			
+			.cells {
+				position: relative;
+				background: rgba(0,0,0,0.85);
+				padding: 1rem;
+				border-radius: 3px;
+				box-shadow: 0 0 10px rgba(0,0,0,.3);
+			}
+			
+			.div5 { grid-area: 1 / 1 / 2 / 2; }
+			.div2 { grid-area: 1 / 2 / 2 / 3; }
+			.div3 {
+				grid-area: 1 / 3 / 2 / 4;
+				text-align:center;
+			}
+			.div4 { grid-area: 2 / 1 / 3 / 2; }
+			.div6 { grid-area: 2 / 2 / 3 / 3; }
+			.div1 { grid-area: 2 / 3 / 3 / 4; }
+						
+			.futes-status{
+				text-align: center;
+			}
+
+			#futes-info{
+				
+			}
+
+			.futes-value{
+				font-size: 2em;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			span.futes-value-active::after{
+				color: green;
+				content: "Aktív";
+			}
+
+			span.futes-value-inactive::after{
+				color: red;
+				content: "Inaktív";
+			}
+
+			.futes-target{
+				font-weight: bold;
+			}
+
+			#futes-tabla{
+				padding-top: 1em;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			#futes-tabla td:nth-of-type(2){
+				padding-left: 0.5em;
+				text-align: left;
+			}
+
+			.vezerlo-gomb{
+				color: silver;
+				text-shadow: 0 0 5px black;
+				text-align: center;
+				font-size: 1.2em;
+				border: 1px solid #222;
+				border-radius: 3px;
+				padding: 10px;
+				width: 80px;
+				display: inline-block;
+				background: linear-gradient(90deg, #333, #222);
+				user-select: none;
+				box-shadow: 0 0 5px black;
+			}
+
+			.vezerlo-gomb:active{
+				-background: linear-gradient(0deg, #222, #333);
+				border: 1px solid #222;
+				color: white;
+				text-shadow: 0 0 5px white;
+			}
+
+			.futes-vezerlo-gomb-szoveg{
+				position: absolute;
+				bottom: 20px;
+				right: 20px;
+				width: 20px;
+				-height: 20px;
+				border-radius: 50%;
+			}
+
+			.futes-vezerlo-gomb-szoveg:active, .futes-vezerles-active{
+				color: black;
+				text-shadow: 0 0 5px black;
+				background: linear-gradient(0deg, yellow, lightyellow);
+			}
+
+			
+			.bold{
+				font-weight: bold;
+			}
+
+			.kapunyito-gomb{
+				text-align: center;
+			}
+
+			.kapunyito-gomb a{
+				margin: 0 1em;
+			}
+
+			.kapunyito-gomb:first-of-type{
+				padding-bottom: 30px;
+			}
+			
+			.kapunyito-gomb-szoveg{
+
+			}
+			
+			.kapunyito-gomb-szoveg:active{
+				
+			}
+			
+			.villany-info{
+				display: grid;
+				grid-template-columns: repeat(1, 1fr);
+				grid-template-rows: repeat(1, 1fr);
+				grid-column-gap: 15px;
+				grid-row-gap: 15px;
+			}
+
+			.vill-div1 { grid-area: 1 / 1 / 2 / 2; }
+			.vill-div2 { grid-area: 1 / 2 / 2 / 3; }
+			.vill-div3 { grid-area: 2 / 2 / 3 / 3; }
+			.vill-div4 { grid-area: 2 / 1 / 3 / 2; }
+
+			.vill{
+				height: 72px;
+				position: relative;
+			}
+			
+			.time{
+				font-weight: bold;
+				font-size: 2em;
+			}
+
+			.dayname{
+				font-size: 1.7em;
+			}
+
+			.date{
+				font-size: 1.2em;
+			}
+
+			.weather{
+				padding-top: 1em;
+			}
+
+			.suntimes{
+				padding-top: 1em;
+			}
+
+			.solar_row{
+				padding-bottom: 0px;
+				text-align: center;
+			}
+
+			.solar_row>table{
+				padding-top: 0.8em;
+			}
+
+			#solar_power {
+				font-size: 1.6em;
+				font-weight: bold;
+			}
+
+			div#last_solar_update_row{
+				font-size: 0.8em;
+				position: absolute;
+				bottom: 10px;
+				text-align: center;
+				font-style: italic;
+			}
+
+			#solar_targets {
+				width: 100%;
+			}
+
+			.solar_kwh_unit{
+				font-size: 0.7em;
+			}
+
+			#camera_overlay{
+				width: 100%;
+				height: 100%;
+				position: fixed;
+				top: 0;
+				left: 0;
+				display: none;
+				background-color: rgba(0,0,0,.8);
+			}
+
+			#camera_canvas{
+				text-align: center;
+				padding: 5px;
+				position: fixed;
+				top: 110px;
+				left: 200px;
+				background: black;
+				display: none;
+			}
+
+			#camera_canvas>img{
+				border: 0;
+				width: 640px;	
+				height: 360px;
+			}
+
+			#kamera_kep_valto>a{
+				text-decoration: none;
+				padding: 5px 10px;
+				margin: 0 10px;
+			}				
+
+		</style>
+    </head>
+    <body>
+		<div id="main">
+			<div class="cells div1">
+				
+				<h1>Kapunyitás</h1>
+				
+				<div class="kapunyito-gomb">
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kapu_nyitas_gyalog();">
+						GYALOG
+					</a>
+
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kapu_nyitas_auto();">
+						AUTO
+					</a>
+				</div>
+				
+				<h1>Ledsor</h1>
+				
+				<div class="kapunyito-gomb">
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="ledsorOn();">
+						BE
+					</a>
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="ledsorOff();">
+						KI
+					</a>
+				</div>
+			</div>
+			<div class="cells div2">
+				<h1>Kamera</h1>
+				
+				<div class="kapunyito-gomb">
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(0);">
+						Bejárat
+					</a>
+
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(3);">
+						Kapu
+					</a>
+				</div>
+					
+				<div class="kapunyito-gomb">
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(1);">
+						Terasz
+					</a>
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(2);">
+						Kert
+					</a>
+				</div>
+			</div>
+			<div class="cells div3">
+				
+				<div class="time"><span id="current-time"></div>
+				<div class="dayname"><span id="current-dayname"></span></div>
+				<div class="date"><span id="current-date"></span></div>
+				<div class="weather">
+					<span id="kulso-hom"></span>°C <span id="phrase"></span><br/>
+					Pára: <span id="para"></span>%<br/>
+					Szél: <span id="szel"></span>km/h <span id="szel_irany"></span><br/>
+				</div>
+				<div class="suntimes">&uarr; <span id="napfelkelte">##:##</span> &darr; <span id="napnyugta">##:##</span></div>
+			</div>
+			<div class="cells div5">
+				
+				<h1>Napelem</h1>
+
+				<div class="solar_row">Termelés: <span id="solar_power">###</span> W</div>
+				<div class="solar_row">Aktív energia: <span id="wattValue">###</span> W</div>
+
+				<div class="solar_row">
+				<table id="solar_targets">
+					<tr>
+						<th></th>
+						<th>Akt.</th>
+						<th>Cél</th>
+						<th>Telj.</th>
+					</tr>
+					<tr>
+						<th align="right">Napi</th>
+						<td><span id="solar_daily">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_daily_target">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_daily_percent">###</span> %</td>
+					</tr>
+
+					<tr>
+						<th align="right">Éves</th>
+						<td><span id="solar_yearly">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_yearly_target">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_yearly_percent">###</span> %</td>
+					</tr>
+
+					<tr>
+						<th align="right">Eddig</th>
+						<td><span id="solar_total">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_total_target">###</span> <span class="solar_kwh_unit">kWh</span></td>
+						<td><span id="solar_total_percent">###</span> %</td>
+					</tr>
+				</table>
+				</div>
+
+				<div id="last_solar_update_row">Utolsó adat: <span id="last_solar_update">###</span></div>	
+			</div>
+			<div class="cells div4">
+				<h1>Hőmérsékletek</h1>
+					<div id="homerseklet-grid">
+						<div class="hom hom-div1">
+							<span class="hom-name">Szoba#1</span>
+							<span class="hom-text">
+								<span class="hom-value" id="temp-0">##.##</span>
+								<span class="hom-unit">°C</span>
+							</span>
+						</div>
+						<div class="hom hom-div2">
+							<span class="hom-name">Szoba#2</span>
+							<span class="hom-text">
+								<span class="hom-value" id="temp-1">##.##</span>
+								<span class="hom-unit">°C</span>
+							</span>
+						</div>
+						<div class="hom hom-div3">
+							<span class="hom-name">Szoba#3</span>
+							<span class="hom-text">
+								<span class="hom-value" id="temp-2">##.##</span>
+								<span class="hom-unit">°C</span>
+							</span>
+						</div>
+						<div class="hom hom-div4">
+							<span class="hom-name">Szoba#4</span>
+							<span class="hom-text">
+								<span class="hom-value" id="temp-3">##.##</span>
+								<span class="hom-unit">°C</span>
+							</span>
+						</div>
+					</div>
+			</div>
+			<!--
+			<div class="cells div5">
+				
+				<h1>Villany</h1>
+				<div class="villany-info">
+					<div class="vill vill-div1">
+						<span class="villany-name">Aktív energia</span>
+						<span class="villany-text">
+							<span class="villany-value" id="wattValue2">###</span>
+							<span class="villany-unit">W</span>
+						</span>
+					</div>
+
+					<div class="vill vill-div2">
+						<span class="villany-name">Meddő energia</span>
+						<span class="villany-text">
+							<span class="villany-value" id="wattValue">###</span>
+							<span class="villany-unit">var</span>
+						</span>
+					</div>
+					<div class="vill vill-div3">
+						<span class="villany-name">Napi</span>
+						<span class="villany-text">
+							<span class="villany-value" id="dailyKwhValue">###</span>
+							<span class="villany-unit">kvarh</span>
+						</span>
+					</div>
+
+					<div class="vill vill-div4">
+						<span class="villany-name">Napi</span>
+						<span class="villany-text">
+							<span class="villany-value" id="dailyKwhValue2">###</span>
+							<span class="villany-unit">kWh</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			-->
+			<div class="cells div6">				
+				<h1>Fűtés</h1>
+
+				<div class="futes-value futes-value-inactive"><span id="futes-value"></span></div>
+				<div class="futes-status">
+					<span id="heat-changed-since">###</span>
+				</div>
+				
+				<table id="futes-tabla">
+					<tr>
+						<td><span id="target-max-heating"></span>°C</td>
+						<td><span id="max-heating-time-offset"></span></td>
+					</tr>
+					<tr>
+							<td><span id="target-min-heating"></span>°C</td>
+						<td><span id="min-heating-time-offset"></span></td>
+					</tr>
+				</table>
+				
+				<div class="futes-vezerlo-gomb">
+					<a class="vezerlo-gomb futes-vezerlo-gomb-szoveg" id="futes-vezerlo-gomb" onclick="return toggleFutes();">
+						IO
+					</a>
+				</div>
+				
+			</div>
+		</div>
+	<div id="camera_overlay" onclick="hide_camera_img();"></div>
+	<div id="camera_canvas">
+		<img id="camera_img" src="" onclick="hide_camera_img();">
+
+		<div id="kamera_kep_valto">
+			<a href="javascript:kamera(0)" class="vezerlo-gomb">Bejárat</a>
+			<a href="javascript:kamera(3)" class="vezerlo-gomb">Kapu</a>
+			<a href="javascript:kamera(1)" class="vezerlo-gomb">Terasz</a>
+			<a href="javascript:kamera(2)" class="vezerlo-gomb">Kert</a>
+		</div>
+	</div>
+	</body>
+		<script>
+
+	//* UTIL *//
+	
+	var ajaxReq = function(server_hostname, method, url, data, callback) {
+      
+      var request = new XMLHttpRequest();
+      request.open(method, "http://" + server_hostname + "/" + url, true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      request.onreadystatechange = function() {
+          if(request.readyState == XMLHttpRequest.DONE && request.status == 200 && typeof callback === "function") {
+              callback(request.response);
+          }
+      }
+      
+      if(data) {
+        var params = new URLSearchParams(data);
+        request.send(params.toString());
+      } else {
+        request.send();
+      }
+    }
+
+	var setVal = function(id, val) {
+		document.getElementById(id).innerHTML = val;
+	};
+
+	var setCss = function(id, val) {
+		document.getElementById(id).classList.add(val);
+	}
+	
+	var unsetCss = function(id, val) {
+		document.getElementById(id).classList.remove(val);
+	}
+	
+	var padZero = function(be) {
+		if(be < 10)
+			return "0" + be;
+		
+		return be;
+	}
+
+	Date.prototype.stdTimezoneOffset = function() {
+		var jan = new Date(this.getFullYear(), 0, 1);
+		var jul = new Date(this.getFullYear(), 6, 1);
+		return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+	}
+
+
+	//* WATT *//
+	
+	var wattmeter_server = "192.168.1.2";
+	var last_blink = null;
+
+	var ws = new WebSocket('ws://' + wattmeter_server + ':81/', ['arduino']);
+    ws.onopen = function () { ws.send('Connected @ ' + new Date()); };
+    ws.onerror = function (error) { console.log('WebSocket Error ', error);};
+    ws.onmessage = function (e) { 
+      	var msg = JSON.parse(e.data);
+		
+		if("blink" in msg) {
+			if(last_blink)
+				setVal("wattValue", Math.round((3600*1000) / (msg["blink"] - last_blink)));
+
+			last_blink = msg["blink"];
+		}
+	}
+ 
+	var updatePowerMeter  = function() {
+      ajaxReq(wattmeter_server, "GET", "info", null, function(d) {
+        data = JSON.parse(d);
+				
+		setVal("wattValue", Math.round((3600*1000) / (data["lastLight"] - data["prevLight"])));
+		//setVal("dailykWhValue", Math.round(data["sum_lights"] / 100) / 10);
+	  });
+	};
+	
+	//* END WATT *//
+
+	//* THERMOS *//
+
+	var secsHumanReadable = function(secs) {
+		var absSecs = Math.abs(secs);
+		
+		if(absSecs < 60)
+			return absSecs + " mp";
+		
+		if(absSecs < 60 * 60)
+			return (absSecs / 60).toFixed(0) + " perc";
+			
+		return (absSecs / 60 / 60).toFixed(0) + " óra";
+	}
+	
+	var remainingsecsHumanReadable = function(elapsed) {
+		return secsHumanReadable(elapsed) + " múlva";
+	}
+	
+	var elapsedsecsHumanReadable = function(elapsed) {		
+						
+		return secsHumanReadable(elapsed) + " óta";
+	}
+	
+	var getCurrentTimeFrame = function(data) {
+		for(var id in data.warm_periods) {
+			if(! data.warm_periods[id]) continue;
+
+			if(data.minutes_since_monday >= data.warm_periods[id][0] && data.minutes_since_monday <= data.warm_periods[id][1]) {
+				return {"periods": data.warm_periods[id], "minutes": data.minutes_since_monday, "warm": true};
+			}
+		}
+		
+		periods = [];
+		var minutes_since_monday = data.minutes_since_monday + 60 * 24 * 7;
+		
+		for(var i = 0; i<3; i++) {
+			for(var id in data.warm_periods) {
+				if(! data.warm_periods[id]) continue;
+				
+				periods.push([
+					data.warm_periods[id][0] + (i * 60 * 24 *7),
+					data.warm_periods[id][1] + (i * 60 * 24 *7)
+				]);
+			}
+		}
+
+		var max_end = 0;
+		var min_start = minutes_since_monday + 60 * 24 * 7;
+		
+		for(var id in periods) {
+			if(periods[id][1] > max_end && periods[id][1] < minutes_since_monday) {
+				max_end = periods[id][1];
+			}
+
+			if(periods[id][0] < min_start && periods[id][0] > minutes_since_monday) {
+				min_start = periods[id][0];
+			}				
+		}
+		
+		return {"periods":  [max_end, min_start], "minutes": minutes_since_monday, "warm": false};
+	}
+
+	var formatTime = function(date) {
+		return padZero(date.getHours()) + ":" + padZero(date.getMinutes());
+	}
+
+	var formatTimeDst = function(date) {
+		var dstOffset = new Date(date.getTime() + date.stdTimezoneOffset() * 60000);
+		return padZero(dstOffset.getHours()) + ":" + padZero(dstOffset.getMinutes());
+	}
+
+	var thermos_server = "192.168.1.3";
+
+
+	var updateThermos = function() {
+	  ajaxReq(thermos_server, "GET", "dashboard_info", null, function(d) {
+        data = JSON.parse(d);
+		
+        setVal("temp-0", data["temps"]["10668a4c010800d3"]);
+		setVal("temp-1", data["temps"]["1039fd4b01080063"]);
+		setVal("temp-2", data["temps"]["1035ca4c0108004d"]);
+		setVal("temp-3", data["temps"]["10d7604c01080084"]);
+
+
+		if(data["thermos"]["thermos_control_enabled"] == 1) {
+			setCss("futes-vezerlo-gomb", "futes-vezerles-active");
+			unsetCss("futes-vezerlo-gomb", "futes-vezerles-inactive");
+		} else {
+			setCss("futes-vezerlo-gomb", "futes-vezerles-inactive");
+			unsetCss("futes-vezerlo-gomb", "futes-vezerles-active");
+		}
+
+		if(data["thermos"]["heating_is_on"] == 1) {
+			setCss("futes-value", "futes-value-active");
+			unsetCss("futes-value", "futes-value-inactive");
+		} else {
+			setCss("futes-value", "futes-value-inactive");
+			unsetCss("futes-value", "futes-value-active");
+		}
+		
+		if(data["thermos"]["heating_changed"]) {
+			setVal("heat-changed-since", elapsedsecsHumanReadable(data["thermos"]["current_time"] - data["thermos"]["heating_changed"]));
+		} else {
+			setVal("heat-changed-since", "");
+		}
+		
+		var timeFrame = getCurrentTimeFrame(data["thermos"]);
+		if(timeFrame.warm == true) {
+			setVal("max-heating-time-offset", elapsedsecsHumanReadable( 60 * (timeFrame.minutes - timeFrame.periods[0])));
+			setVal("min-heating-time-offset", remainingsecsHumanReadable( 60 * (timeFrame.periods[1] - timeFrame.minutes)));
+		} else {
+			setVal("max-heating-time-offset", remainingsecsHumanReadable( (timeFrame.periods[1] - timeFrame.minutes) *60) );
+			setVal("min-heating-time-offset", elapsedsecsHumanReadable( (timeFrame.minutes - timeFrame.periods[0]) * 60));
+		}
+				
+		setVal("target-max-heating", data["thermos"]["hard_max"] + data["thermos"]["turn_off_offset"]);
+		setVal("target-min-heating", data["thermos"]["hard_min"]);
+
+		var napkelte = new Date(0);
+		napkelte.setMinutes(data["time"]["sunrise_minutes"]);
+		var napnyugta = new Date(0);
+		napnyugta.setMinutes(data["time"]["sunset_minutes"]);
+
+		setVal("napfelkelte", formatTimeDst(napkelte));
+		setVal("napnyugta", formatTimeDst(napnyugta));
+	  });
+	}
+
+	//* END THERMOS *//
+
+	//* INVERTER *//
+	var updateInverter = function() {
+		var server = "192.168.1.4";
+		var url = "inverter";
+		ajaxReq(server, "GET", url, null, function(d) {
+        	var inverter_power_flow_data = JSON.parse(d);
+
+			var inverter = inverter_power_flow_data["Body"]["Inverters"]["1"];
+			var most = new Date();
+
+			setVal("solar_power", inverter["P"]);
+			
+			setVal("solar_daily", Math.round(inverter["E_Day"] / 1000 * 100) / 100);
+			var solar_daily_target = solar_monthly_targets[most.getMonth()] / napokSzama(most.getFullYear(), most.getMonth() +1);
+			setVal("solar_daily_target", Math.round(solar_daily_target * 100) / 100);
+			setVal("solar_daily_percent", Math.round(((inverter["E_Day"] / 1000) / solar_daily_target * 100)));
+			
+			setVal("solar_yearly", Math.round(inverter["E_Year"] / 1000));
+			var solar_yearly_target = 330;
+			if(most.getFullYear() > 2019) {
+				solar_yearly_target = solar_monthly_targets.reduce(function (a, b) {return a + b;}, 0);
+			}
+			setVal("solar_yearly_target", solar_yearly_target);
+			setVal("solar_yearly_percent", Math.round(((inverter["E_Year"] / 1000) / solar_yearly_target * 100)));
+
+			setVal("solar_total", Math.round(inverter["E_Total"] / 1000));
+			var solar_total_target = calcTotalSolarTarget();
+			setVal("solar_total_target", Math.round(solar_total_target));
+			setVal("solar_total_percent", Math.round(((inverter["E_Total"] / 1000) / solar_total_target * 100)));
+			
+			var last_updated = new Date(inverter_power_flow_data["Head"]["Timestamp"]);
+			setVal("last_solar_update", last_updated.getFullYear() + ". " + padZero(last_updated.getMonth() +1) + ". " + padZero(last_updated.getDate()) + ". " + formatTime(last_updated));
+		});
+	}
+
+
+	var napokSzama = function(year, month) { 
+		return new Date(year, month, 0).getDate(); 
+	}
+
+	var requestValues = function() {
+		//updatePowerMeter();
+		updateInverter();
+		updateThermos();
+	}
+
+	var napok = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
+	var updateTime = function() {
+		var now = new Date;
+
+		setVal("current-time", formatTime(now));
+		setVal("current-dayname", napok[now.getDay()]);
+		setVal("current-date", now.getFullYear() + ". " + padZero(now.getMonth() +1) + ". " + padZero(now.getDate()) + ".");
+	}
+
+	var fullscreen = false;
+
+	var toggleFutes = function() {
+		fetch("http://" +  thermos_server + "/thermos_toggle", {
+			method: "POST",
+		}).then(updateThermos);
+
+		return false;
+	}
+
+	var parseWeather = function(d) {
+		setVal("kulso-hom", d["vt1observation"]["feelsLike"]);
+		setVal("phrase", d["vt1observation"]["phrase"]);
+		setVal("para", d["vt1observation"]["humidity"]);
+		setVal("szel", d["vt1observation"]["windSpeed"]);
+		setVal("szel_irany", d["vt1observation"]["windDirCompass"]);
+	}
+
+	var updateWeather = function() {
+		fetch("https://api.weather.com/v2/turbo/vt1observation?apiKey=d522aa97197fd864d36b418f39ebb323&format=json&geocode=0%2C0&language=hu-HU&units=m")
+			.then(response => {
+				return response.json()
+			})
+			.then(parseWeather);
+	}
+
+	var kapu_nyitas_gyalog = function() {
+		fetch("kapu-gyalog", {
+			method: "POST",
+		});
+	}
+	
+	var kapu_nyitas_auto = function() {
+		fetch("kapu-auto", {
+			method: "POST",
+		});
+	}
+
+	var ledsorOn = function() {
+		fetch("ledsor-on", {
+			method: "POST",
+		});
+	}
+	
+	var ledsorOff = function() {
+		fetch("ledsor-off", {
+			method: "POST",
+		});
+	}
+
+	var kamera = function(id) {
+		document.getElementById("camera_overlay").style.display = "block";
+		document.getElementById("camera_canvas").style.display = "block";
+
+		document.getElementById("camera_img").src = "http://192.168.1.5/cgi-bin/snapshot.cgi?chn="+ id + "&u=admin&p=lkjhgfds&q=0&rand=" + Math.random();
+	}
+
+	var hide_camera_img = function() {
+		document.getElementById("camera_overlay").style.display = "none";
+		document.getElementById("camera_canvas").style.display = "none";
+		document.getElementById("camera_img").src = "";
+	}
+
+	var solar_monthly_targets = [
+		200,
+		300,
+		500,
+		700,
+		700,
+		700,
+		700,
+		700,
+		500,
+		400,
+		200,
+		200
+	];
+
+	var calcTotalSolarTarget = function() {
+		var startDate = new Date("2019-06-01");
+		var currentDate = new Date();
+
+		if(startDate.getFullYear() == currentDate.getFullYear() 
+			&& startDate.getMonth() == currentDate.getMonth()) 
+		{
+			return (currentDate.getDate() - startDate.getDate()) / napokSzama(currentDate.getFullYear(), currentDate.getMonth() -1) * solar_monthly_targets[currentDate.getMonth()];
+		}
+
+		var elso_tort_havi = (napokSzama(startDate.getFullYear(), startDate.getMonth() -1) - startDate.getDate()) / napokSzama(startDate.getFullYear(), startDate.getMonth() -1) * solar_monthly_targets[startDate.getMonth()];
+		var aktualis_tort_havi  = currentDate.getDate() / napokSzama(currentDate.getFullYear(), currentDate.getMonth() -1) * solar_monthly_targets[currentDate.getMonth()];
+		
+		if(startDate.getFullYear() == currentDate.getFullYear() 
+			&& (startDate.getMonth() + 1) == currentDate.getMonth()) 
+		{
+			return elso_tort_havi + aktualis_tort_havi;
+		}
+		
+		var koztes_honapok = 0;
+		var koztes_datum = new Date(startDate.getFullYear(), startDate.getMonth() + 2, -1);
+		while(koztes_datum < currentDate) {
+			koztes_honapok += solar_monthly_targets[koztes_datum.getMonth()];
+			koztes_datum = new Date(koztes_datum.getFullYear(), koztes_datum.getMonth() + 2, -1);
+		}
+
+		return elso_tort_havi + koztes_honapok + aktualis_tort_havi;
+	}
+
+	window.onload = function() {
+		updatePowerMeter();
+		requestValues();
+		setInterval(requestValues, 5 * 60 * 1000);
+		updateWeather();
+		setInterval(updateWeather, 15 * 60 * 1000);
+		updateTime();
+		setInterval(updateTime, 1000);
+
+/*
+		document.body.onclick = function() {
+			if(fullscreen) {
+				document.documentElement.exitFullscreen();
+				fullscreen = false;
+			} else {
+				document.documentElement.requestFullscreen();
+				fullscreen = true;
+			}
+		};
+*/
+	}
+		
+		
+    </script>
+</html>
