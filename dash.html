@@ -3,7 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="data:,">
 		<title>Home Dashboard</title>
 		<style>
 			*{
@@ -17,6 +18,7 @@
 				background: black;
 				color: #f0f0f0;
 				font-family: 'Segoe UI';
+				font-size: 15px;
 			}
 			h1{
 				margin: 0 0 15px;
@@ -42,6 +44,38 @@
 				grid-template-rows: repeat(2, 1fr);
 				grid-column-gap: 0px;
 				grid-row-gap: 10px;
+			}
+
+			#klima-header{
+				font-size: 2em;
+				font-weight: bold;
+			}
+
+			#klima-grid {
+				display: grid;
+				grid-template-columns: 2fr 1fr;
+				grid-template-rows: repeat(2, 1fr);
+				grid-column-gap: 0px;
+				grid-row-gap: 10px;
+			}
+
+			.klima-div{
+				margin: 20px 0 0 15px;
+			}
+
+			.klima-div1 { grid-area: 1 / 1 / 2 / 2; }
+			.klima-div2 { grid-area: 1 / 2 / 2 / 3; }
+			.klima-div3 { grid-area: 2 / 1 / 3 / 2; }
+			.klima-div4 { grid-area: 2 / 2 / 3 / 3; }
+
+			#futes {
+				margin-bottom: 0.8em;
+			}
+
+			#futes-header{
+				font-size: 2em;
+				font-weight: bold;
+				text-align: left;
 			}
 			
 			.hom-div1 { grid-area: 1 / 1 / 2 / 2; }
@@ -92,13 +126,15 @@
 			.div3 {
 				grid-area: 1 / 3 / 2 / 4;
 				text-align:center;
+				padding-bottom: 0;
+				padding-right: 0;
 			}
 			.div4 { grid-area: 2 / 1 / 3 / 2; }
 			.div6 { grid-area: 2 / 2 / 3 / 3; }
 			.div1 { grid-area: 2 / 3 / 3 / 4; }
 						
 			.futes-status{
-				text-align: center;
+				
 			}
 
 			#futes-info{
@@ -108,15 +144,14 @@
 			.futes-value{
 				font-size: 2em;
 				font-weight: bold;
-				text-align: center;
 			}
 
-			span.futes-value-active::after{
+			.futes-value-active::after{
 				color: green;
 				content: "Aktív";
 			}
 
-			span.futes-value-inactive::after{
+			.futes-value-inactive::after{
 				color: red;
 				content: "Inaktív";
 			}
@@ -150,7 +185,20 @@
 				box-shadow: 0 0 5px black;
 			}
 
-			.vezerlo-gomb:active{
+			.kis-vezerlo-gomb{
+				color: silver;
+				text-shadow: 0 0 5px black;
+				text-align: center;
+				font-size: 1em;
+				border: 1px solid #222;
+				border-radius: 3px;
+				padding: 10px;
+				background: linear-gradient(90deg, #333, #222);
+				user-select: none;
+				box-shadow: 0 0 5px black;
+			}
+
+			.kis-vezerlo-gomb:active, .vezerlo-gomb:active{
 				-background: linear-gradient(0deg, #222, #333);
 				border: 1px solid #222;
 				color: white;
@@ -159,7 +207,7 @@
 
 			.futes-vezerlo-gomb-szoveg{
 				position: absolute;
-				bottom: 20px;
+				top: 20px;
 				right: 20px;
 				width: 20px;
 				-height: 20px;
@@ -175,6 +223,10 @@
 			
 			.bold{
 				font-weight: bold;
+			}
+
+			.small{
+				font-size: 13.33px;
 			}
 
 			.kapunyito-gomb{
@@ -220,20 +272,17 @@
 				font-size: 2em;
 			}
 
-			.dayname{
-				font-size: 1.7em;
-			}
-
 			.date{
 				font-size: 1.2em;
+				padding-bottom: 10px;
 			}
 
 			.weather{
-				padding-top: 1em;
+				/* padding-top: 1em; */
 			}
 
 			.suntimes{
-				padding-top: 1em;
+				/* padding-top: 1em; */
 			}
 
 			.solar_row{
@@ -296,13 +345,111 @@
 				text-decoration: none;
 				padding: 5px 10px;
 				margin: 0 10px;
-			}				
+			}
 
+			#popup{
+				position: fixed;
+				top: 10px;
+				left: 10px;
+				padding: 15px;
+				background-color: #333;
+				color: white;
+				display: none;
+			}
+
+			#bottom_status_strip {
+				position: fixed;
+				top: 525px;
+				left: 10px;
+				background-color: #333;
+				color: white;
+				font-size: 40px;
+				padding-left: 10px;
+			}
+
+			#tumbledryer {
+				display: none;
+			}
+
+			#tumbledryer svg{
+				fill: white;
+				float: left;
+				height: 52px;
+			}
+
+			#tumbledryer-remaining{
+				display: none;
+			}
+
+			#tumbledryer-status{
+				display: none;
+			}
+
+			#lightbulb{
+				display: none;
+			}
+			#ws_status{
+				position: fixed;
+				top: 565px;
+				left: 900px;
+				color: yellow;
+				text-shadow: 1px 1px 5px #444;
+				font-size: 40px;
+			}
+			#ws_status>span{
+				padding: 0px;
+				margin: 0px;
+				display: inline-block;
+			}
+
+			#dev_status{
+				position: fixed;
+				top: 587px;
+				left: 10px;
+				color: black;
+				font-size: 10px;
+				font-weight: bold;
+			}
+
+			.gombok>h1{
+				font-size: 15px;
+				margin: 0 0 5px;
+			}
+
+			.gombok .vezerlo-gomb{
+				font-size: 15px;
+    			height: 15px;
+			}
+
+			.gombok .kapunyito-gomb{
+				padding: 0.5em;
+			}
+
+			.kamera-gomb{
+				display: inline-block;
+				margin: 0.5em;
+			}
+
+			.ldr {
+				font-size: 10px;
+			}
+
+			#elorejelzes{
+				padding-top: 10px;
+				text-align: left;
+			}
+
+			#elorejelzes .phrase{
+				max-width: 180px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
 		</style>
     </head>
     <body>
 		<div id="main">
-			<div class="cells div1">
+			<div class="cells div1 gombok">
 				
 				<h1>Kapunyitás</h1>
 				
@@ -316,7 +463,18 @@
 					</a>
 				</div>
 				
-				<h1>Ledsor</h1>
+				<h1>Előszoba világítás <small class="ldr">(<span id="ldr">###</span>)</small></h1>
+				
+				<div class="kapunyito-gomb">
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('taviranyito 16236607')">
+						BE
+					</a>
+					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('taviranyito 16203967')">
+						KI
+					</a>
+				</div>
+
+				<h1>Nappali világítás</h1>
 				
 				<div class="kapunyito-gomb">
 					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="ledsorOn();">
@@ -330,36 +488,53 @@
 			<div class="cells div2">
 				<h1>Kamera</h1>
 				
-				<div class="kapunyito-gomb">
-					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(0);">
-						Bejárat
+				<div class="kamera-sor">
+					<a class="kamera-gomb" onclick="kamera(0);">
+						<img class="cam-img" data-id="0" width="128" height="72">
 					</a>
 
-					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(3);">
-						Kapu
+					<a class="kamera-gomb" onclick="kamera(3);">
+						<img class="cam-img" data-id="3" width="128" height="72">
 					</a>
 				</div>
 					
-				<div class="kapunyito-gomb">
-					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(1);">
-						Terasz
+				<div class="kamera-sor">
+					<a class="kamera-gomb" onclick="kamera(1);">
+						<img class="cam-img" data-id="1" width="128" height="72">
 					</a>
-					<a class="vezerlo-gomb kapunyito-gomb-szoveg" onclick="kamera(2);">
-						Kert
+					<a class="kamera-gomb" onclick="kamera(2);">
+						<img class="cam-img" data-id="2" width="128" height="72">
 					</a>
 				</div>
 			</div>
 			<div class="cells div3">
 				
-				<div class="time"><span id="current-time"></div>
-				<div class="dayname"><span id="current-dayname"></span></div>
-				<div class="date"><span id="current-date"></span></div>
+				<div class="time"><span id="current-time"></span></div>
+				<div class="date"><span id="current-dayname"></span>, <span id="current-date"></span></div>
 				<div class="weather">
 					<span id="kulso-hom"></span>°C <span id="phrase"></span><br/>
-					Pára: <span id="para"></span>%<br/>
-					Szél: <span id="szel"></span>km/h <span id="szel_irany"></span><br/>
+					Szél: <span id="szel"></span>km/h <span id="szel_irany"></span>, Pára: <span id="para"></span>%<br/>
+					Eső: <span id="eso"></span><br/>
+					UV: <span id="uv"></span><br/>
 				</div>
 				<div class="suntimes">&uarr; <span id="napfelkelte">##:##</span> &darr; <span id="napnyugta">##:##</span></div>
+				<table id="elorejelzes">
+					<tr>
+						<td><span id="d0-name"></span></td>
+						<td><span id="d0-day-temp"></span><span id="d0-night-temp"></span>°C</td>
+						<td class="phrase"><span id="d0-phrase"></span></td>
+					</tr>
+					<tr>
+						<td><span id="d1-name"></span></td>
+						<td><span id="d1-day-temp"></span><small><span id="d1-night-temp"></span>°C</small></td>
+						<td class="phrase"><span id="d1-phrase"></span></td>
+					</tr>
+					<tr>
+						<td><span id="d2-name"></span></td>
+						<td><span id="d2-day-temp"></span><small><span id="d2-night-temp"></span>°C</small></td>
+						<td class="phrase"><span id="d2-phrase"></span></td>
+					</tr>
+				</table>
 			</div>
 			<div class="cells div5">
 				
@@ -473,35 +648,56 @@
 			</div>
 			-->
 			<div class="cells div6">				
-				<h1>Fűtés</h1>
+				<div id="futes">
+					<div class="futes-status">
+						<span id="futes-header">Fűtés </span>
+						<span class="futes-value futes-value-inactive" id="futes-value"></span>
+					</div>
 
-				<div class="futes-value futes-value-inactive"><span id="futes-value"></span></div>
-				<div class="futes-status">
-					<span id="heat-changed-since">###</span>
+					<div class="futes-status">
+						Vált: <span id="heat-changed-since" data-heat-changed-at="0">###</span>, 
+						Napi fűtés: <span id="heating-on-time">###</span>
+					</div>
+
+					<div class="futes-status">
+						Cél: 
+						<span id="target-max-heating"></span>°C <span id="max-heating-time-offset"></span>,
+						<span id="target-min-heating"></span>°C <span id="min-heating-time-offset"></span>
+					</div>
+
+					<div class="futes-vezerlo-gomb">
+						<a class="vezerlo-gomb futes-vezerlo-gomb-szoveg" id="futes-vezerlo-gomb" onclick="return toggleFutes();">
+							IO
+						</a>
+					</div>
 				</div>
+
+				<div id="klima-header">Klíma</div>
 				
-				<table id="futes-tabla">
-					<tr>
-						<td><span id="target-max-heating"></span>°C</td>
-						<td><span id="max-heating-time-offset"></span></td>
-					</tr>
-					<tr>
-							<td><span id="target-min-heating"></span>°C</td>
-						<td><span id="min-heating-time-offset"></span></td>
-					</tr>
-				</table>
-				
-				<div class="futes-vezerlo-gomb">
-					<a class="vezerlo-gomb futes-vezerlo-gomb-szoveg" id="futes-vezerlo-gomb" onclick="return toggleFutes();">
-						IO
-					</a>
+				<div id="klima-grid">
+					<div class="klima-div klima-div1">
+						<span class="klima-name">Szoba#1</span>
+						<span id="ac-szoba1-status"></span>
+					</div>
+					<div class="klima-div klima-div2">
+						<a class="kis-vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('gree-set ' + szoba1_ac + ' Pow 1')">BE</a>
+						<a class="kis-vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('gree-set ' + szoba1_ac + ' Pow 0')">KI</a>
+					</div>
+					<div class="klima-div klima-div3">
+						<span class="klima-name">Szoba#2>
+						<span id="ac-szoba2-status"></span>
+					</div>
+					<div class="klima-div klima-div4">
+						<a class="kis-vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('gree-set ' + szoba2_ac + ' Pow 1')">BE</a>
+						<a class="kis-vezerlo-gomb kapunyito-gomb-szoveg" onclick="ws.send('gree-set ' + szoba2_ac + ' Pow 0')">KI</a>
+					</div>
 				</div>
 				
 			</div>
 		</div>
 	<div id="camera_overlay" onclick="hide_camera_img();"></div>
 	<div id="camera_canvas">
-		<img id="camera_img" src="" onclick="hide_camera_img();">
+		<img id="camera_img" src="" onclick="open_camera_rtsp();">
 
 		<div id="kamera_kep_valto">
 			<a href="javascript:kamera(0)" class="vezerlo-gomb">Bejárat</a>
@@ -510,11 +706,77 @@
 			<a href="javascript:kamera(2)" class="vezerlo-gomb">Kert</a>
 		</div>
 	</div>
+	<div id="popup">
+		###
+	</div>
+	<div id="bottom_status_strip">
+		<span id="tumbledryer">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M147 13c-17 4-32 20-36 37-1 7-2 145-2 452 0 386 0 443 3 451 3 12 15 26 27 32l9 4 348 1c391 0 362 1 378-13l13-17 4-9V49l-4-9-13-17c-16-14 12-13-373-13-271 0-347 1-354 3zm707 35l5 6v186H142v-93c0-100-1-96 10-102 3-2 102-2 350-3h346l6 6zm5 560v338l-5 6-6 6H502c-373 0-353 0-359-10l-1-341V270h717v338z"/><path d="M283 81a63 63 0 00-42 65c2 24 15 43 37 53 15 7 29 8 45 3 46-14 61-72 27-106a66 66 0 00-67-15zm38 33c10 6 14 13 15 24 2 18-10 33-29 34-15 2-28-8-33-23-4-13 3-30 15-36 10-5 25-5 32 1zM655 127c-4 2-8 9-8 15 0 2 3 7 6 10 5 5 7 5 12 5 8-2 13-8 13-16 0-11-12-19-23-14zM720 127c-7 3-10 14-6 22 3 6 12 9 19 6 7-2 10-7 10-15 0-10-12-18-23-13zM456 329c-34 6-74 22-104 42-19 12-49 42-64 62-14 18-31 51-38 73-10 31-12 44-12 84 0 34 1 39 5 57 16 64 48 113 98 151a266 266 0 00417-150c4-19 5-24 5-58a238 238 0 00-44-148c-13-20-51-59-71-72-28-18-61-32-94-40-19-4-77-5-98-1zm89 32c46 10 85 31 118 63a225 225 0 0169 167c-1 64-25 120-71 164a229 229 0 01-320 1c-77-74-95-186-44-278a235 235 0 01248-117z"/><path d="M622 481c-21 17-39 45-46 75-4 13-4 19-3 39 1 38 13 65 40 92 17 17 24 20 32 16 12-6 13-18 3-27-36-32-50-66-43-105 3-22 15-42 32-60 17-16 20-21 15-30-6-11-16-11-30 0z"/></svg>:
+			<span id="tumbledryer-status"></span>
+			<span id="tumbledryer-remaining"></span>
+		</span>
+		<span id="lightbulb">💡: <span id="lightbulb_delay">###</span>mp</span>
+	</div>
+	<div id="dev_status">
+		#1:
+		<span id="mem">###</span>
+		<span id="wifi">###</span>
+		<span id="uptime">###</span>
+
+		#2:
+		<span id="mem2">###</span>
+		<span id="wifi2">###</span>
+		<span id="uptime2">###</span>
+		#3:
+		<span id="mem3">###</span>
+		<span id="wifi3">###</span>
+		<span id="uptime3">###</span>
+	</div>
+	<div id="ws_status">
+		<span id="ws_kapcsolo">▪</span>
+		<span id="ws_watt">▪</span>
+		<span id="ws_lcd">▪</span>
+	</div>
 	</body>
 		<script>
 
-	//* UTIL *//
+	//* SECRETS  *//
+
+	var cams = [
+		{"user": null, "pass": null, "ip": null},
+		{"user": null, "pass": null, "ip": null},
+		{"user": null, "pass": null, "ip": null},
+		{"user": null, "pass": null, "ip": null},
+	];
+
+	var nvr_user = null;
+	var nvr_pass = null;
+	var nvr_ip = null;
+
+	var geoCords = [
+		null,
+		null,
+	];
+
+	var weatherApiKey = null;
+
+	var kapcsolo_server = null;
+	var wattmeter_server = null;
+	var lcd_server = null;
 	
+	var taviranyito1 = [null];
+	var taviranyito2 = [null];
+	var taviranyito_protocol = null;
+
+	var szoba1_ac = null;
+	var szoba2_ac = null;
+
+	var solar_collect_start_date = null;
+
+	//* END of SECRETS *//
+
+	//* UTIL *//
+
 	var ajaxReq = function(server_hostname, method, url, data, callback) {
       
       var request = new XMLHttpRequest();
@@ -562,22 +824,35 @@
 
 	//* WATT *//
 	
-	var wattmeter_server = "192.168.1.2";
 	var last_blink = null;
 
-	var ws = new WebSocket('ws://' + wattmeter_server + ':81/', ['arduino']);
-    ws.onopen = function () { ws.send('Connected @ ' + new Date()); };
-    ws.onerror = function (error) { console.log('WebSocket Error ', error);};
-    ws.onmessage = function (e) { 
-      	var msg = JSON.parse(e.data);
-		
-		if("blink" in msg) {
-			if(last_blink)
-				setVal("wattValue", Math.round((3600*1000) / (msg["blink"] - last_blink)));
+	var watt_ws_connect = function() {
+		var ws_watt = new WebSocket('ws://' + wattmeter_server + ':81/', ['arduino']);
+		ws_watt.onopen = function () {
+			// ws.send('Connected @ ' + new Date());
+			console.log("ws_watt connected: " + wattmeter_server + " @ " + new Date());
+			document.getElementById("ws_watt").style.color = "green";
+		};
+		ws_watt.onclose = function(e) {
+			document.getElementById("ws_watt").style.color = "red";
+			setTimeout(watt_ws_connect, 1000);
+		};
+		ws_watt.onerror = function(e) {
+			ws_watt.close();
+		};
+		ws_watt.onmessage = function (e) { 
+			var msg = JSON.parse(e.data);
+			
+			if("blink" in msg) {
+				if(last_blink)
+					setVal("wattValue", Math.round((3600*1000) / (msg["blink"] - last_blink)));
 
-			last_blink = msg["blink"];
+				last_blink = msg["blink"];
+			}
 		}
 	}
+
+	watt_ws_connect();
  
 	var updatePowerMeter  = function() {
       ajaxReq(wattmeter_server, "GET", "info", null, function(d) {
@@ -585,10 +860,249 @@
 				
 		setVal("wattValue", Math.round((3600*1000) / (data["lastLight"] - data["prevLight"])));
 		//setVal("dailykWhValue", Math.round(data["sum_lights"] / 100) / 10);
+
+		setVal("mem2", "M: " + (100 - Math.round(data["heap"] / 81920 * 100)) + "%");
+		setVal("wifi2", "W: " + 2 * (data["wifi"] + 100) + "%");
+		setVal("uptime2", getUptimeString(data["uptime"]));
 	  });
 	};
 	
 	//* END WATT *//
+
+	//* kapcsolo lcd websocket *//
+	var updateLcdServer  = function() {
+      ajaxReq(lcd_server, "GET", "trigger_info", null, function(d) {
+        data = JSON.parse(d);
+
+		setVal("dht-sensor", data["temp"] + "°C, " + data["hum"] + "%");
+				
+		setVal("mem3", "M: " + (100 - Math.round(data["freeheap"] / 81920 * 100)) + "%");
+		setVal("wifi3", "W: " + 2 * (data["rssi"] + 100) + "%");
+		setVal("uptime3", getUptimeString(data["millis"]));
+	  });
+	};
+
+	var lcd_ws_connect = function() {
+		var ws_lcd = new WebSocket('ws://' + lcd_server + ':81/', ['arduino']);
+		ws_lcd.onopen = function () {
+			// ws.send('Connected @ ' + new Date());
+			console.log("ws_lcd connected: " + lcd_server + " @ " + new Date());
+			document.getElementById("ws_lcd").style.color = "green";
+		};
+		ws_lcd.onclose = function(e) {
+			document.getElementById("ws_lcd").style.color = "red";
+			setTimeout(lcd_ws_connect, 1000);
+		};
+		ws_lcd.onerror = function(e) {
+			ws_lcd.close();
+		};
+		ws_lcd.onmessage = function (e) { 
+			var msg = JSON.parse(e.data);
+			
+			if("t" in msg) { // légkondi
+				updateAcStatus(msg);
+			} else {
+				console.log(msg);
+			}
+		}
+	}
+
+	lcd_ws_connect();
+
+	//* KAPCSOLO WEBSOCKET *//
+
+
+	var doorbell = null;
+	var doorbell_sound = new Audio('http://' + kapcsolo_server + '/doorbell.mp3');
+	var basic_sound = new Audio('http://' + kapcsolo_server + '/basic.mp3');
+
+	var lightbulb_interval = null;
+	var lightbulb_timeout = null;
+	var lightbulb_endtime = null;
+
+	var tumbledryer_timeout = null;
+	var tumbledryer_last_updated = null;
+
+	var ac_szoba1_timeout = null;
+	var ac_szoba2_timeout = null;
+
+	var ws = null;
+	var kapcsolo_ws_connect = function() {
+		ws = new WebSocket('ws://' + kapcsolo_server + ':81/', ['arduino']);
+		ws.onopen = function () { 
+			// ws.send('Connected @ ' + new Date()); doorbell_sound.play();
+			console.log("ws connected: " + kapcsolo_server + " @ " + new Date());
+			document.getElementById("ws_kapcsolo").style.color = "green";
+		};
+		ws.onclose = function(e) {
+			document.getElementById("ws_kapcsolo").style.color = "red";
+			setTimeout(kapcsolo_ws_connect, 1000);
+		};
+		ws.onerror = function(e) {
+			ws.close();
+		};
+		ws.onmessage = function (e) { 
+			var msg = JSON.parse(e.data);
+			
+			if("doorbell" in msg) {
+				doorbell_sound.play();
+				doorbell = msg["doorbell"];
+
+				kamera(0);
+				setTimeout(hide_camera_img, 30 * 1000);
+			} else if("heating_changed" in msg) {
+				if(msg["heating_is_on"] == 1) {
+					setCss("futes-value", "futes-value-active");
+					unsetCss("futes-value", "futes-value-inactive");
+				} else {
+					setCss("futes-value", "futes-value-inactive");
+					unsetCss("futes-value", "futes-value-active");
+				}
+				
+				document.getElementById("heat-changed-since").setAttribute("data-heat-changed-at", Number(new Date()));
+				setVal("heat-changed-since", elapsedsecsHumanReadable(0));
+			} else if("rc" in msg) {
+				var val = msg["rc"];
+				var proto = msg["proto"];
+				
+				if(proto == taviranyito_protocol && ( taviranyito1.indexOf(val) != -1 || taviranyito2.indexOf(val) != -1)) {
+					kamera(3);
+					setTimeout(hide_camera_img, 30 * 1000);
+					if((new Date()).getHours() > 9) {
+						basic_sound.play();
+					}
+				} else if (val == 115464) {
+					doorbell_sound.play();
+					kamera(0);
+					setTimeout(hide_camera_img, 30 * 1000);
+				} else {
+					popup("rc: " + val);
+				}
+			} else if("pir" in msg) {
+				var delay = msg["delay"];
+
+				var lightbulb = document.getElementById("lightbulb");
+
+				document.getElementById("lightbulb_delay").innerHTML = delay;
+				lightbulb_endtime = new Date(new Date().getTime() + delay * 1000);
+
+				lightbulb.style.display = "inline";
+
+				if(lightbulb_interval) {
+					clearInterval(lightbulb_interval);
+				}
+				lightbulb_interval = setInterval(function() {
+					document.getElementById("lightbulb_delay").innerHTML = Math.round((lightbulb_endtime - new Date())/ 1000);
+				}, 1000);
+
+				if(lightbulb_timeout) { 
+					clearTimeout(lightbulb_timeout);
+				}
+				lightbulb_timeout = setTimeout(function() {
+					lightbulb.style.display = "none";
+				}, delay * 1000);
+			} else if("ir-recv" in msg) {
+				var val = msg["ir-recv"];
+				popup("ir: " + val);
+			} else if("tumbledryer" in msg) {
+				var tumbledryer_update_time = msg["tumbledryer"];
+
+				if(tumbledryer_update_time && tumbledryer_update_time > tumbledryer_last_updated) {
+					tumbledryer_last_updated = tumbledryer_update_time;
+
+					fetch('http://' + kapcsolo_server + "/candy_dryer")
+						.then(response => {
+							return response.json()
+						})
+						.then(function(d) {
+							var statoTD = parseInt(d["statusTD"]["StatoTD"])
+
+							var td_status = document.getElementById("tumbledryer-status");
+							var td_remaining = document.getElementById("tumbledryer-remaining");
+
+							td_status.style.display = "none";
+							td_remaining.style.display = "none";
+
+							if(statoTD == 2) {
+								var remaining_time = parseInt(d["statusTD"]["RemTime"]);
+								var finish_time = new Date(new Date().getTime() + 1000 * 60 * remaining_time)
+
+								setVal("tumbledryer-status", minutesFormatted(remaining_time));
+								setVal("tumbledryer-remaining", " @ " + formatTime(finish_time));
+
+								td_remaining.style.display = "inline";
+								td_status.style.display = "inline";
+							} else if(statoTD == 5) {
+								var delay_time = parseInt(d["statusTD"]["DelVal"]);
+								
+								setVal("tumbledryer-status", "késleltetés ")
+								setVal("tumbledryer-remaining", minutesFormatted(delay_time));
+								td_status.style.display = "inline";
+								td_remaining.style.display = "inline";
+							} else if(statoTD == 8) {
+								setVal("tumbledryer-status", "kész")
+								td_status.style.display = "inline";
+							} else if(statoTD == 1) {
+								setVal("tumbledryer-status", "bepakolás")
+								td_status.style.display = "inline";
+							}
+						});
+				}
+
+				var tumbledryer = document.getElementById("tumbledryer");
+				tumbledryer.style.display = "inline";
+
+				if(tumbledryer_timeout) { 
+					clearTimeout(tumbledryer_timeout);
+				}
+				tumbledryer_timeout = setTimeout(function() {
+					tumbledryer.style.display = "none";
+				}, 10 * 1000);
+
+			} else if("t" in msg) { // légkondi
+				updateAcStatus(msg);
+			} else {
+				console.log(msg);
+			}
+		}
+	}
+
+	var updateAcStatus = function(msg){
+		if(msg["t"] != "dat") return;
+
+		var ac_mac = msg["mac"];
+		var elementid = null;
+
+		if(ac_mac == szoba1_ac) {
+			elementid = "ac-szoba1-status";
+		} else if(ac_mac == szoba2_ac) {
+			elementid = "ac-szoba2-status";
+		}
+
+		var ac_status = document.getElementById(elementid);
+		ac_status.style.display = "inline";
+
+		setVal(elementid, msg["dat"][0] == 1 ? "- bekapcsolva" : "");
+
+		if(elementid == "ac-szoba1-status") {
+			if(ac_szoba1_timeout) { 
+				clearTimeout(ac_szoba1_timeout);
+			}
+			ac_szoba1_timeout = setTimeout(function() {
+				ac_status.style.display = "none";
+			}, 65 * 1000);
+		} else if(elementid == "ac-szoba2-status") {
+			if(ac_szoba2_timeout) { 
+				clearTimeout(ac_szoba2_timeout);
+			}
+			ac_szoba2_timeout = setTimeout(function() {
+				ac_status.style.display = "none";
+			}, 65 * 1000);
+		}
+	}
+
+	kapcsolo_ws_connect();
+
 
 	//* THERMOS *//
 
@@ -611,6 +1125,17 @@
 	var elapsedsecsHumanReadable = function(elapsed) {		
 						
 		return secsHumanReadable(elapsed) + " óta";
+	}
+
+	var minutesFormatted = function(minute) {
+		if(minute<60) {
+			return "" + minute + "p";
+		}
+
+		var ora = (minute / 60) | 0
+		var perc = minute % 60;
+
+		return "" + ora + "ó " + perc + "p";
 	}
 	
 	var getCurrentTimeFrame = function(data) {
@@ -661,7 +1186,18 @@
 		return padZero(dstOffset.getHours()) + ":" + padZero(dstOffset.getMinutes());
 	}
 
-	var thermos_server = "192.168.1.3";
+	var getUptimeString = function(uptime) {
+		var uptime_secs = (uptime / 1000) | 0;
+		
+		var days = parseInt( uptime_secs / 3600 / 24);
+		var hours = parseInt( uptime_secs / 3600 ) % 24;
+		var minutes = parseInt( uptime_secs / 60 ) % 60;
+		var seconds = uptime_secs % 60;
+		
+		return padZero(days) + "d " + padZero(hours) + "h " + padZero(minutes) + "m";
+	}
+
+	var thermos_server = "192.168.0.143";
 
 
 	var updateThermos = function() {
@@ -691,10 +1227,14 @@
 		}
 		
 		if(data["thermos"]["heating_changed"]) {
-			setVal("heat-changed-since", elapsedsecsHumanReadable(data["thermos"]["current_time"] - data["thermos"]["heating_changed"]));
+			var heating_changed_at = Number(new Date() - (data["thermos"]["current_time"] - data["thermos"]["heating_changed"]) * 1000);
+			document.getElementById("heat-changed-since").setAttribute("data-heat-changed-at", heating_changed_at);
+			//setVal("heat-changed-since", elapsedsecsHumanReadable(data["thermos"]["current_time"] - data["thermos"]["heating_changed"]));
 		} else {
-			setVal("heat-changed-since", "");
+			//setVal("heat-changed-since", "");
 		}
+		
+		setVal("heating-on-time", (data["thermos"]["heating_on_secs"] / 60).toFixed(0) + " perc");
 		
 		var timeFrame = getCurrentTimeFrame(data["thermos"]);
 		if(timeFrame.warm == true) {
@@ -715,6 +1255,11 @@
 
 		setVal("napfelkelte", formatTimeDst(napkelte));
 		setVal("napnyugta", formatTimeDst(napnyugta));
+		setVal("ldr", data["ldr_sensor"]);
+
+		setVal("mem", "M: " + (100 - Math.round(data["thermos"]["freeheap"] / 81920 * 100)) + "%");
+		setVal("wifi", "W: " + 2 * (data["thermos"]["rssi"] + 100) + "%");
+		setVal("uptime", getUptimeString(data["thermos"]["uptime"]));
 	  });
 	}
 
@@ -722,9 +1267,10 @@
 
 	//* INVERTER *//
 	var updateInverter = function() {
-		var server = "192.168.1.4";
+		var server = kapcsolo_server;
 		var url = "inverter";
 		ajaxReq(server, "GET", url, null, function(d) {
+			if(d=="") return;
         	var inverter_power_flow_data = JSON.parse(d);
 
 			var inverter = inverter_power_flow_data["Body"]["Inverters"]["1"];
@@ -764,6 +1310,7 @@
 		//updatePowerMeter();
 		updateInverter();
 		updateThermos();
+		updateLcdServer();
 	}
 
 	var napok = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
@@ -773,6 +1320,13 @@
 		setVal("current-time", formatTime(now));
 		setVal("current-dayname", napok[now.getDay()]);
 		setVal("current-date", now.getFullYear() + ". " + padZero(now.getMonth() +1) + ". " + padZero(now.getDate()) + ".");
+
+		var heating_changed_at = document.getElementById("heat-changed-since").getAttribute("data-heat-changed-at");
+		if(heating_changed_at != "0") {
+			setVal("heat-changed-since", elapsedsecsHumanReadable(((now - heating_changed_at)/1000) | 0));
+		} else {
+			setVal("heat-changed-since", "nem");
+		}
 	}
 
 	var fullscreen = false;
@@ -785,16 +1339,51 @@
 		return false;
 	}
 
+	var genEsoString = function(d) {
+		var first_eso_idx = 0;
+		for(; first_eso_idx<d["forecastedRainAmount"].length && d["forecastedRainAmount"][first_eso_idx] == 0; first_eso_idx++);
+
+		if(first_eso_idx == d["forecastedRainAmount"].length) {
+			return "nem várható";
+		}
+
+		var eso_kezdete = new Date(d["startTime"][first_eso_idx]);
+		var eso_vege = new Date(d["endTime"][first_eso_idx]);
+		var eso_mennyiseg = d["forecastedRainAmount"][first_eso_idx];
+
+		return eso_mennyiseg + "mm, " + formatTime(eso_kezdete) + " és " + formatTime(eso_vege) + " között";
+	}
+
 	var parseWeather = function(d) {
 		setVal("kulso-hom", d["vt1observation"]["feelsLike"]);
 		setVal("phrase", d["vt1observation"]["phrase"]);
 		setVal("para", d["vt1observation"]["humidity"]);
 		setVal("szel", d["vt1observation"]["windSpeed"]);
 		setVal("szel_irany", d["vt1observation"]["windDirCompass"]);
+		setVal("uv", d["vt1observation"]["uvDescription"] + " (" + d["vt1observation"]["uvIndex"] + ")");
+
+		setVal("eso", genEsoString(d["vt1precipitation"]));
+
+
+		var vt1dailyForecast = d["vt1dailyForecast"];
+
+		for(var i = 0; i<3;i++) {
+			if(vt1dailyForecast["day"]["dayPartName"][i]) {
+				setVal("d" + i + "-name", vt1dailyForecast["day"]["dayPartName"][i])
+				setVal("d" + i + "-day-temp", vt1dailyForecast["day"]["temperature"][i])
+				setVal("d" + i + "-night-temp", "/" + vt1dailyForecast["night"]["temperature"][i])
+				setVal("d" + i + "-phrase", vt1dailyForecast["day"]["phrase"][i])
+			} else {
+				setVal("d" + i + "-name", vt1dailyForecast["night"]["dayPartName"][i])
+				setVal("d" + i + "-day-temp", "")
+				setVal("d" + i + "-night-temp", vt1dailyForecast["night"]["temperature"][i])
+				setVal("d" + i + "-phrase", vt1dailyForecast["night"]["phrase"][i])
+			}
+		}
 	}
 
 	var updateWeather = function() {
-		fetch("https://api.weather.com/v2/turbo/vt1observation?apiKey=d522aa97197fd864d36b418f39ebb323&format=json&geocode=0%2C0&language=hu-HU&units=m")
+		fetch("https://api.weather.com/v2/turbo/vt1precipitation;vt1observation;vt1dailyForecast?apiKey=" + weatherApiKey + "&format=json&geocode=" + geoCords[0] + "%2C" + geoCords[1] + "&language=hu-HU&units=m")
 			.then(response => {
 				return response.json()
 			})
@@ -802,34 +1391,45 @@
 	}
 
 	var kapu_nyitas_gyalog = function() {
-		fetch("kapu-gyalog", {
-			method: "POST",
-		});
+		ws.send('kapu-gyalog');
 	}
 	
 	var kapu_nyitas_auto = function() {
-		fetch("kapu-auto", {
-			method: "POST",
-		});
+		ws.send('kapu-auto');
 	}
 
 	var ledsorOn = function() {
-		fetch("ledsor-on", {
-			method: "POST",
-		});
+		ws.send('ledsor-on');
 	}
 	
 	var ledsorOff = function() {
-		fetch("ledsor-off", {
-			method: "POST",
-		});
+		ws.send('ledsor-off');
+	}
+
+
+	var updateCams = function() {
+		var cams = document.querySelectorAll(".cam-img");
+			
+		for (var i=0; i < cams.length; i++) {
+			var id = cams[i].getAttribute("data-id");
+			cams[i].src = getCamSnapshotUrl(i);
+		}
+	}
+
+	var getCamStreamUrl = function(id) {
+		return "rtsp://" + cams[id]["user"] + ":" + cams[id]["pass"] + "@" + cams[id]["ip"] + ":80/ch0_0.264";
+	}
+
+	var getCamSnapshotUrl = function(id) {
+		return "http://" + nvr_ip + "/cgi-bin/snapshot.cgi?chn="+ id + "&u=" + nvr_user + "&p=" + nvr_pass + "&q=0&rand=" + Math.random();
 	}
 
 	var kamera = function(id) {
 		document.getElementById("camera_overlay").style.display = "block";
 		document.getElementById("camera_canvas").style.display = "block";
 
-		document.getElementById("camera_img").src = "http://192.168.1.5/cgi-bin/snapshot.cgi?chn="+ id + "&u=admin&p=lkjhgfds&q=0&rand=" + Math.random();
+		document.getElementById("camera_img").src = getCamSnapshotUrl(id);
+		document.getElementById("camera_img").href = getCamStreamUrl(id);
 	}
 
 	var hide_camera_img = function() {
@@ -838,33 +1438,48 @@
 		document.getElementById("camera_img").src = "";
 	}
 
+	var open_camera_rtsp = function() {
+		window.location = document.getElementById("camera_img").href;
+	}
+
+	var popup_interval = null;
+	var popup = function(msg) {
+		popup_interval = setTimeout(hide_popup, 3 * 1000);
+		document.getElementById("popup").style.display = "block";
+		document.getElementById("popup").innerHTML = msg;
+	}
+
+	var hide_popup = function() {
+		document.getElementById("popup").style.display = "none";
+	}
+
 	var solar_monthly_targets = [
-		200,
-		300,
-		500,
-		700,
-		700,
-		700,
-		700,
-		700,
-		500,
-		400,
-		200,
-		200
+		0, // január
+		0, // február
+		0, // március
+		0, // április
+		0, // május
+		0, // június
+		0, // július
+		0, // augusztus
+		0, // szeptember
+		0, // október
+		0, // november
+		0  // december
 	];
 
 	var calcTotalSolarTarget = function() {
-		var startDate = new Date("2019-06-01");
+		var startDate = solar_collect_start_date;
 		var currentDate = new Date();
 
 		if(startDate.getFullYear() == currentDate.getFullYear() 
 			&& startDate.getMonth() == currentDate.getMonth()) 
 		{
-			return (currentDate.getDate() - startDate.getDate()) / napokSzama(currentDate.getFullYear(), currentDate.getMonth() -1) * solar_monthly_targets[currentDate.getMonth()];
+			return (currentDate.getDate() - startDate.getDate()) / napokSzama(currentDate.getFullYear(), currentDate.getMonth() +1) * solar_monthly_targets[currentDate.getMonth()];
 		}
 
-		var elso_tort_havi = (napokSzama(startDate.getFullYear(), startDate.getMonth() -1) - startDate.getDate()) / napokSzama(startDate.getFullYear(), startDate.getMonth() -1) * solar_monthly_targets[startDate.getMonth()];
-		var aktualis_tort_havi  = currentDate.getDate() / napokSzama(currentDate.getFullYear(), currentDate.getMonth() -1) * solar_monthly_targets[currentDate.getMonth()];
+		var elso_tort_havi = (napokSzama(startDate.getFullYear(), startDate.getMonth() +1) - startDate.getDate()) / napokSzama(startDate.getFullYear(), startDate.getMonth() +1) * solar_monthly_targets[startDate.getMonth()];
+		var aktualis_tort_havi  = currentDate.getDate() / napokSzama(currentDate.getFullYear(), currentDate.getMonth() +1) * solar_monthly_targets[currentDate.getMonth()];
 		
 		if(startDate.getFullYear() == currentDate.getFullYear() 
 			&& (startDate.getMonth() + 1) == currentDate.getMonth()) 
@@ -873,16 +1488,17 @@
 		}
 		
 		var koztes_honapok = 0;
-		var koztes_datum = new Date(startDate.getFullYear(), startDate.getMonth() + 2, -1);
+		var koztes_datum = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0, 23, 59, 59, 999)
 		while(koztes_datum < currentDate) {
 			koztes_honapok += solar_monthly_targets[koztes_datum.getMonth()];
-			koztes_datum = new Date(koztes_datum.getFullYear(), koztes_datum.getMonth() + 2, -1);
+			koztes_datum = new Date(koztes_datum.getFullYear(), koztes_datum.getMonth() + 2, 0, 23, 59, 59, 999)
 		}
 
 		return elso_tort_havi + koztes_honapok + aktualis_tort_havi;
 	}
 
 	window.onload = function() {
+		
 		updatePowerMeter();
 		requestValues();
 		setInterval(requestValues, 5 * 60 * 1000);
@@ -890,6 +1506,8 @@
 		setInterval(updateWeather, 15 * 60 * 1000);
 		updateTime();
 		setInterval(updateTime, 1000);
+		updateCams();
+		setInterval(updateCams, 60 * 1000);
 
 /*
 		document.body.onclick = function() {
